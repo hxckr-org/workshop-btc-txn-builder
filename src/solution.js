@@ -1,11 +1,11 @@
 const elliptic = require('elliptic');
 const EC = new elliptic.ec('secp256k1');
 const crypto = require('crypto');
-
+const bs58 = require('bs58');  
 
 function createTransaction(utxos, targetAddress, amount, privateKey) {
   try {
-    let transaction = {
+    const transaction = {
       version: 1,
       inputs: [],
       outputs: [],
@@ -42,7 +42,7 @@ function createTransaction(utxos, targetAddress, amount, privateKey) {
     }
 
     transaction.inputs.forEach((input, index) => {
-      let signature = generateSignature(privateKey, transaction, index);
+      const signature = generateSignature(privateKey, transaction, index);
       input.scriptSig = signature;
     });
 
@@ -67,10 +67,10 @@ function deriveAddressFromPrivateKey(privateKey) {
   const keyPair = EC.keyFromPrivate(privateKey);
   const publicKey = keyPair.getPublic().encode('hex');
   const pubKeyHash = crypto.createHash('ripemd160').update(doubleSHA256(Buffer.from(publicKey, 'hex'))).digest();
-  const networkByte = Buffer.from([0x6f]);
+  const networkByte = Buffer.from([0x6f]);  // Testnet address prefix
   const payload = Buffer.concat([networkByte, pubKeyHash]);
   const checksum = doubleSHA256(payload).slice(0, 4);
-  return base58Encode(Buffer.concat([payload, checksum]));
+  return bs58.encode(Buffer.concat([payload, checksum]));  // Use bs58 encoding
 }
 
 // Serialize the transaction
@@ -111,21 +111,6 @@ function varIntToHex(number) {
 
 function reverseHex(hex) {
   return hex.match(/../g).reverse().join('');
-}
-
-function base58Encode(buffer) {
-  const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  let encoded = '';
-  let x = BigInt('0x' + buffer.toString('hex'));
-  while (x > 0) {
-    let remainder = x % 58n;
-    x = x / 58n;
-    encoded = ALPHABET[Number(remainder)] + encoded;
-  }
-  for (let i = 0; i < buffer.length && buffer[i] === 0; i++) {
-    encoded = '1' + encoded;
-  }
-  return encoded;
 }
 
 module.exports = { createTransaction };

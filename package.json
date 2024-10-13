@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/hxckr-org/workshop-btc-txn-builder#readme",
   "dependencies": {
+    "bs58": "^6.0.0",
     "elliptic": "^6.5.7"
   },
   "devDependencies": {
