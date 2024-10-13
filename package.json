@@ -1,0 +1,30 @@
+{
+  "name": "workshop-btc-txn-builder",
+  "version": "1.0.0",
+  "description": "Bitcoin transaction builder ",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hxckr-org/workshop-btc-txn-builder.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "transaction",
+    "signet"
+  ],
+  "author": "Jamal (@jrakibi)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hxckr-org/workshop-btc-txn-builder/issues"
+  },
+  "homepage": "https://github.com/hxckr-org/workshop-btc-txn-builder#readme",
+  "dependencies": {
+    "elliptic": "^6.5.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
